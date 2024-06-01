@@ -1,0 +1,65 @@
+.centro {
+     text-align: center;
+     width: '900px'
+}
+
+.campoInvalido  {
+    background-color: #E3496C
+}
+
+.campoValido  {
+     background-color: #E3496C
+ }
+
+ .container {
+    display: flex;
+    background-color:#00b6eb ;
+    flex-direction: row;
+    height: 100%;
+    border-bottom-color: #fff;
+    border-bottom-width: 12px
+
+
+
+ }
+
+ .pagina {
+    background-color:#00b6eb ;
+    height: 80vh;
+
+ }
+
+ .coluna {
+    flex: 1;
+    padding: 40px;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+
+ }
+
+ .titulo {
+    font-size: 40px;
+     
+    color:  #0086BC
+ }
+
+ .informacaoSoftware {
+    font-size: 25px;
+    color: #fff
+
+ }
+
+ .tituloPagina {
+    font-size: 25px;
+    color: #fff;
+    display: inline;
+ }
+
+ .icone {
+    width: 100px;
+    display: inline;
+ }
+
+ 
+
