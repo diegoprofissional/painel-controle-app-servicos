@@ -1,0 +1,7 @@
+a {
+    color: #00f; /* Azul padrão para todos os links */
+}
+
+a.ativo {
+    color: #fff; /* Branco para links ativos */
+}

@@ -1,12 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {styled} from 'styled-components'
 import axios from "axios"
+import Modal from "../componentes/Modal";
+import { baseUrlBackend } from "../utils/variaveis";
+import { Link } from "react-router-dom";
 
 export default function PrestadoresServico() {
   const [prestadoresServicos, setPrestadoresServicos] = useState([]);
+  const modalRef = useRef();
 
   const ContainerPrestadoresServicos = styled.div`
     display: flex;
+    align-items: center;
+    margin: 20px;
+    border: 1px solid #ddd;
+    padding: 5px;
+
   `
   const LinhaPrestadoresServicos = styled.div`
    flex: 1
@@ -32,7 +41,15 @@ export default function PrestadoresServico() {
 
       
     async function fetchPrestadors(){
-      const prestadoresServicos = await fetch("http://localhost:8080/api/prestadores-servicos")
+
+
+
+      const prestadoresServicos = await fetch(`${baseUrlBackend}/api/prestadores-servicos`, {
+        headers: {
+         // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+          // Substitua `seuTokenDeAutenticacao` pelo seu token real
+        }
+      })
       const resultado  = await prestadoresServicos.json()
       setPrestadoresServicos(resultado)
     }
@@ -44,25 +61,26 @@ export default function PrestadoresServico() {
 
    const handleExcluirPrestadorServico = async (id) => {
     try {
-        alert("Excluindo prestador de serviço com ID: " + id);
-        await axios.delete(`http://localhost:8080/api/prestadores-servicos/${id}`);
-        alert("Prestador de serviço excluído com sucesso!");
+        
+        await axios.delete(`${baseUrlBackend}/api/prestadores-servicos/${id}`);
+
+        modalRef.current.open();
         // Atualizar a lista de prestadores de serviço após a exclusão
         // Você pode chamar a função fetchPrestadors() aqui novamente ou qualquer outro método de atualização.
     } catch (error) {
-        alert("Ocorreu um erro ao excluir o prestador de serviço. Por favor, tente novamente.");
+        modalRef.current.open();
         console.error("Erro ao excluir prestador de serviço:", error);
     }
 };
 
   return (
     <Container>
-    <LinhaOpcoes>
-      <a href="prestador-servico/novo">Adicionar Prestador de Serviço</a>
+
   
-    </LinhaOpcoes>
     <LinhaConteudo>
     <LinhaPrestadoresServicos><h1>Prestadores de Serviços</h1></LinhaPrestadoresServicos>
+    <LinhaPrestadoresServicos>      <Link to="/prestador-servico/novo">Adicionar Prestador de Serviço</Link>
+    </LinhaPrestadoresServicos>
 
     <ContainerPrestadoresServicos>
     <LinhaPrestadoresServicos>
@@ -104,6 +122,8 @@ celular
               </LinhaPrestadoresServicos>
       
               <LinhaPrestadoresServicos>
+              <Modal nome={prestadorServico.primeiroNome} ref={modalRef}></Modal>
+
               <button onClick={(e) => { e.preventDefault(); handleExcluirPrestadorServico(prestadorServico.id)}}> Excluir</button>
                 </LinhaPrestadoresServicos>
       

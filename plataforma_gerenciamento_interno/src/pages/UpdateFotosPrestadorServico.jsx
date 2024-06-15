@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import axios from "axios";
-
+import styled  from "styled-components";
+import { baseUrlBackend } from "../utils/variaveis";
 export default function UpdateFotosPrestadorServico() {
+
+  const Container = styled.div`
+  text-align: center
+`
+
+const Formulario = styled.form`
+  magin: auto
+`
+   
 
     const {id} = useParams()
     const [foto, setFoto] = useState(null);
@@ -13,7 +23,6 @@ export default function UpdateFotosPrestadorServico() {
       const file = event.target.files[0];
       if (file) {
         const imageUrl = URL.createObjectURL(file);
-        alert(imageUrl)
         setFoto(imageUrl);
         setArquivoFoto(file)
       }
@@ -23,7 +32,7 @@ export default function UpdateFotosPrestadorServico() {
     useEffect( () => {
       
          async function fetchPrestadorServico(id){
-            const resultado = await axios.get('http://192.168.0.87:8080/api/prestadores-servicos/fotos/' + id)
+            const resultado = await axios.get(`${baseUrlBackend}/api/prestadores-servicos/fotos/` + id)
            setFoto(resultado.data)
             
          }
@@ -44,7 +53,7 @@ const handleAtualizarPrestadorServico = async (event) => {
 
     try {
       const response = await axios.put(
-        `http://192.168.0.87:8080/api/prestadores-servicos/fotos/${id}`,
+        `${baseUrlBackend}/api/prestadores-servicos/fotos/${id}`,
         dados
       );
       alert('Foto Atualizada')
@@ -59,9 +68,9 @@ const handleAtualizarPrestadorServico = async (event) => {
     }
   };
 
-    return <div>
+    return <Container>
        
-       <form encType='multipart/form-data' >
+       <Formulario encType='multipart/form-data' >
 
        <div>
               <div>
@@ -78,12 +87,11 @@ const handleAtualizarPrestadorServico = async (event) => {
           </div>
       
 
-        
-
         <button onClick={ (e) => {  e.preventDefault(e); handleAtualizarPrestadorServico(e)}}>atualizar cadastro</button>
-       </form>
+        <Link to="/prestadores-servicos">cancelar</Link>
+       </Formulario>
 
        
 
-    </div>
+    </Container>
 }

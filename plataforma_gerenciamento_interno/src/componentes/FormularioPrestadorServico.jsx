@@ -1,20 +1,29 @@
 import { useState } from 'react'
 import imagem from './avatar.webp';
 import axios from 'axios';
-import "./FormularioPrestadorServico.css"
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components'
+import styles from './FormularioPrestadorServico.module.css'
+import InputPadrao from './controles/BotaoPadrao';
+import TextAreaPadrao from './controles/TextAreaPadrao';
+import { baseUrlBackend } from '../utils/variaveis';
 
-const InputPadrao = styled.input`
-border-radius: 10px;
-padding: 10px;
+
+
+
+
+const SelectPadrao = styled.select`
 border: 1px solid #ccc;
+padding: 10px;
+background-color: #fff
+
 `
 
-const styles = {
-     width: '100px',
-     height: '100px'
-   };
+const Container = styled.div`
+   text-align:center
+`
+
+
 
 export default function FormularioPrestadorServico() {
 
@@ -23,7 +32,6 @@ export default function FormularioPrestadorServico() {
        const file = event.target.files[0];
        if (file) {
          const imageUrl = URL.createObjectURL(file);
-         alert(imageUrl)
          setFoto(imageUrl);
          setArquivoFoto(file)
        }
@@ -83,10 +91,12 @@ export default function FormularioPrestadorServico() {
   dados.append('instalacaoCameras', instalacaoCameras);
       
           try {
-            const response = await axios.post(
-              'http://192.168.0.87:8080/api/prestadores-servicos',
-              dados
-            );
+            const response = await axios.post(`${baseUrlBackend}/api/admin/prestadores-servicos`, dados, {
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              }
+            });
+      
             alert('cadastrado com sucesso')
 
             setCelular('')
@@ -103,7 +113,9 @@ export default function FormularioPrestadorServico() {
         };
 
 
-     return ( <form encType='multipart/form-data' > <div className="centro">
+     return ( 
+      <Container>
+     <form className={styles.formulario} encType='multipart/form-data' > <div className="centro">
 
 <div>
               <div>
@@ -120,71 +132,90 @@ export default function FormularioPrestadorServico() {
           </div>
 
           <div>
-               <div><label style={{backgroundColor: 'pink', 'text-align': 'left'}}>Primeiro Nome</label></div>
+               <div><label>Primeiro Nome</label></div>
                <InputPadrao  onBlur={handleValidacaoPrimeiroNome}  value={primeiroNome} onChange={ (event) => { setPrimeiroNome(event.target.value) }} ></InputPadrao>
                <div>{primeiroNomeValido ? "" : "valor inválido"}</div>
           </div>
 
           <div>
                <div><label>Sobrenome</label></div>
-               <input value={sobrenome} onChange={ (event) => { setSobrenome(event.target.value) }}  />
+               <InputPadrao value={sobrenome} onChange={ (event) => { setSobrenome(event.target.value) }}  />
 
           </div>
 
           <div>
                <div><label>celular</label></div>
-               <input value={celular} onChange={ (event) => { setCelular(event.target.value) }}   />
+               <InputPadrao value={celular} onChange={ (event) => { setCelular(event.target.value) }}   />
 
           </div>
 
           <div>
              <div> <label>Cidade</label></div>
-              <select >
+              <SelectPadrao>
                <option>Franca-SP</option>
                <option>São Joaquim da Barra-SP</option>
                <option>Orlândia-SP</option>
 
 
-              </select>
+              </SelectPadrao>
 
           </div>
 
           <div>
                <div><label>Apresentação</label></div>
-               <textarea style={{width: '60%'}} value={descricao} onChange={ (event) => { setDescricao(event.target.value) }} />
+               <TextAreaPadrao  value={descricao} onChange={ (event) => { setDescricao(event.target.value) }} />
 
           </div>
         
            <div><label>Quais serviços você presta?</label></div>
            <div>
 
+             <div>
+             <input type="checkbox" checked={segurancaResidencial} onChange={ (event) => { setSegurancaResidencial(event.target.checked) }}  />
 
                <label>Segurança Residencial</label>
-               <input type="checkbox" checked={segurancaResidencial} onChange={ (event) => { setSegurancaResidencial(event.target.checked) }}  />
+               </div>
 
-               <label>Elétrica</label>
+               <div>
                <input type="checkbox" checked={eletrica} onChange={ (event) => { setEletrica(event.target.checked) }} />
 
+               <label>Elétrica</label>
+               </div>
 
+              <div>
+              <input type="checkbox" checked={internetRedes} onChange={ (event) => { setInternetRedes(event.target.checked) }} />
                <label>Internet e Redes</label>
-               <input type="checkbox" checked={internetRedes} onChange={ (event) => { setInternetRedes(event.target.checked) }} />
+               </div>
 
-               <label>Televisão</label>
+               <div>
                <input type="checkbox" checked={televisao} onChange={ (event) => { setTelevisao(event.target.checked) }} />
 
-               <label>Telefonia</label>
+               <label>Televisão</label>
+               </div>
+
+               <div>
                <input type="checkbox" checked={telefonia} onChange={ (event) => { setTelefonia(event.target.checked) }} />
 
-               <label>Limpeza Doméstica</label>
+               <label>Telefonia</label>
+               </div>
+
+               <div>
                <input type="checkbox" checked={limpezaDomestica} onChange={ (event) => { setLimpezaDomestica(event.target.checked) }} />
 
+               <label>Limpeza Doméstica</label>
+               </div>
+
+              <div>
+              <input type="checkbox" checked={instalacaoEquipamentos} onChange={ (event) => { setInstalacaoEquipamentos(event.target.checked) }} />
 
                <label>Instalação de Equipamentos</label>
-               <input type="checkbox" checked={instalacaoEquipamentos} onChange={ (event) => { setInstalacaoEquipamentos(event.target.checked) }} />
+               </div>
 
-               <label>Instalação Câmeras</label>
+               <div>
                <input type="checkbox" checked={instalacaoCameras} onChange={ (event) => { setInstalacaoCamaeras(event.target.checked) }} />
 
+               <label>Instalação Câmeras</label>
+               </div>
            
            </div>
 
@@ -195,7 +226,9 @@ export default function FormularioPrestadorServico() {
      </div>
      
      
-     </form>)
+     </form>
+     </Container>
+     )
 
 
 

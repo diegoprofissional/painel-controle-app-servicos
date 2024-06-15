@@ -1,8 +1,21 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import axios from "axios";
+import InputPadrao from "../componentes/controles/BotaoPadrao";
+import TextAreaPadrao from "../componentes/controles/TextAreaPadrao";
+import styled from "styled-components";
+import { baseUrlBackend } from "../utils/variaveis";
 
 export default function UpdatePrestadorServico() {
+
+
+   const Container = styled.div`
+     text-align: center
+   `
+
+   const Formulario = styled.form`
+     magin: auto
+   `
 
     const {id} = useParams()
     const [primeiroNome, setPrimeiroNome] = useState()
@@ -23,7 +36,7 @@ export default function UpdatePrestadorServico() {
     useEffect( () => {
       
          async function fetchPrestadorServico(id){
-            const resultado = await axios.get('http://192.168.0.87:8080/api/prestadores-servicos/' + id)
+            const resultado = await axios.get(`${baseUrlBackend}/api/prestadores-servicos/` + id)
             setPrimeiroNome(resultado.data.primeiroNome)
             setSobrenome(resultado.data.sobrenome)
             setCelular(resultado.data.celular)
@@ -60,7 +73,7 @@ const handleAtualizarPrestadorServico = async (event) => {
 
     try {
       const response = await axios.put(
-        `http://192.168.0.87:8080/api/prestadores-servicos/${id}`,
+        `http://${baseUrlBackend}/api/prestadores-servicos/${id}`,
         dados
       );
       alert('cadastrado com sucesso')
@@ -78,68 +91,90 @@ const handleAtualizarPrestadorServico = async (event) => {
     }
   };
 
-    return <div>
+    return <Container>
        
-       <form>
+       <Formulario>
 
       
 
         <div>
-        <label>Primeiro Nome</label>
-        <input value={primeiroNome} onChange={(e) => { setPrimeiroNome(e.target.value)  }} />
+        <div> <label>Primeiro Nome</label> </div>
+        <InputPadrao value={primeiroNome} onChange={(e) => { setPrimeiroNome(e.target.value)  }} />
         </div>
         <div>
-        <label>Sobrenome</label>
-        <input value={sobrenome} />
+        <div><label>Sobrenome</label></div>
+        <InputPadrao value={sobrenome} />
         </div>
 
          <div>
-        <label>Celular (Whatsapp)</label>
-        <input value={celular} />
+        <div><label>Celular (Whatsapp)</label></div>
+        <InputPadrao value={celular} />
         </div>
 
         <div>
-        <label>Descrição</label>
-        <textarea value={descricao}></textarea>
+        <div><label>Descrição</label></div>
+        <TextAreaPadrao value={descricao} />
         </div>
 
         <div><label>Quais serviços você presta?</label></div>
            <div>
 
+              <div>
+              <input type="checkbox" checked={segurancaResidencial} onChange={ (event) => { setSegurancaResidencial(event.target.checked) }}  />
 
                <label>Segurança Residencial</label>
-               <input type="checkbox" checked={segurancaResidencial} onChange={ (event) => { setSegurancaResidencial(event.target.checked) }}  />
+               </div>
 
-               <label>Elétrica</label>
+               <div>
                <input type="checkbox" checked={eletrica} onChange={ (event) => { setEletrica(event.target.checked) }} />
 
+               <label>Elétrica</label>
+               </div>
 
-               <label>Internet e Redes</label>
+               <div>
                <input type="checkbox" checked={internetRedes} onChange={ (event) => { setInternetRedes(event.target.checked) }} />
 
-               <label>Televisão</label>
+               <label>Internet e Redes</label>
+               </div>
+
+               <div>
                <input type="checkbox" checked={televisao} onChange={ (event) => { setTelevisao(event.target.checked) }} />
 
-               <label>Telefonia</label>
+               <label>Televisão</label>
+               </div>
+
+               <div>
                <input type="checkbox" checked={telefonia} onChange={ (event) => { setTelefonia(event.target.checked) }} />
 
-               <label>Limpeza Doméstica</label>
+               <label>Telefonia</label>
+               </div>
+
+               <div>
                <input type="checkbox" checked={limpezaDomestica} onChange={ (event) => { setLimpezaDomestica(event.target.checked) }} />
 
+               <label>Limpeza Doméstica</label>
+               </div>
 
-               <label>Instalação de Equipamentos</label>
+               <div>
                <input type="checkbox" checked={instalacaoEquipamentos} onChange={ (event) => { setInstalacaoEquipamentos(event.target.checked) }} />
 
-               <label>Instalação Câmeras</label>
+               <label>Instalação de Equipamentos</label>
+               </div>
+
+               <div>
                <input type="checkbox" checked={instalacaoCameras} onChange={ (event) => { setInstalacaoCamaeras(event.target.checked) }} />
 
+               <label>Instalação Câmeras</label>
+               </div>
            
            </div>
 
         <button onClick={ (e) => {  e.preventDefault(e); handleAtualizarPrestadorServico(e)}}>atualizar cadastro</button>
-       </form>
+        <Link to="/prestadores-servicos">cancelar</Link>
+
+       </Formulario>
 
        
 
-    </div>
+    </Container>
 }

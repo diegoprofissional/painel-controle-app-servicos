@@ -1,40 +1,14 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-
+import { baseUrlBackend } from '../utils/variaveis'
+import { Link, NavLink, Outlet, useLocation, useParams } from 'react-router-dom'
+import styles from './Menu.module.css'
 
 export default function Menu() {
 
-  const Card = styled.section`
-   background-color: #00b6eb;
-   color: #fff;
-   margin: 20px;
-   padding: 15px;
-   border-radius: 4px;
-  `
-
-  const InformacaoCard = styled.div`
-    font-size: 40px;
-    text-align: center;
-    font-weight: bold;
-
-  `
-
-  const TituloCard = styled.div`
-    font-size: 20px;
-    text-align: center;
-
-
-  `
-
-  const ContainerInformacao = styled.div`
-     display: flex;
-     flex-direction: row;
-  `
-
-  const LinhaContainerInformacao = styled.div`
-     flex: 1;
-  `
+ 
+   const [localizacao, setLocalizacao] = useState()
 
     const Container = styled.div`
     display: flex;
@@ -53,20 +27,9 @@ export default function Menu() {
    flex: 4
   `
 
-    const [numeroPrestadoresRegistrados, setNumeroPrestaoresRegistrados] = useState()
+  const location = useLocation();
 
-
-    useEffect( () => {
-       
-       async function fetchNumeroPrestadoresServicosRegistrados(){
-            const resultado = await axios('http://localhost:8080/api/prestadores-servicos/analitico/numero-cadastros');
-            console.log(resultado.data)
-            setNumeroPrestaoresRegistrados(resultado.data)   
-       }
-
-       fetchNumeroPrestadoresServicosRegistrados()
-
-    }, [])
+   //setLocalizacao(location.pathname)  
 
     return (
 
@@ -74,28 +37,18 @@ export default function Menu() {
         <Container>
         <LinhaOpcoes>
         <div className="container">
-        <div><a className="btn btn-primary" href="prestades-servico">Prestadores de Serviço</a></div>
-        <div><a href="clientes">Clientes</a></div>
+        <div><NavLink className={({isActive}) => isActive ? styles.ativo : undefined } end={true} to="/prestadores-servicos">Prestadores de Serviço</NavLink></div>
+        <div><NavLink className={({isActive}) => isActive ? styles.ativo : undefined } end={true} to="/clientes">Clientes</NavLink></div>
 
 
         </div>
       
         </LinhaOpcoes>
         <LinhaConteudo>
-           <ContainerInformacao>
-            <LinhaContainerInformacao>
-              <Card>
-                <InformacaoCard> {numeroPrestadoresRegistrados} </InformacaoCard>
-                <TituloCard>Prestadores Registrados</TituloCard>
-              </Card>
-            </LinhaContainerInformacao>
-            <LinhaContainerInformacao>2</LinhaContainerInformacao>
 
-            <LinhaContainerInformacao>3</LinhaContainerInformacao>
-
-            <LinhaContainerInformacao>4</LinhaContainerInformacao>
-
-           </ContainerInformacao>
+          <Outlet>
+          </Outlet>
+        
         </LinhaConteudo>
         </Container>
 

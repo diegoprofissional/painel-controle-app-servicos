@@ -46,7 +46,7 @@
 
  .informacaoSoftware {
     font-size: 25px;
-    color: #fff
+    /* color: #fff */
 
  }
 
@@ -62,4 +62,33 @@
  }
 
  
+.containerAbas {
+   display: flex;
+   flex-direction: row;
+}
 
+.linhaAba {
+   flex: 1;
+   margin: 0px 5px 0px 0px
+}
+
+.containerTitulo {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+
+.linhaTituloLogo {
+
+   flex: 1
+
+}
+
+.linhaTitulo {
+ 
+    flex: 14
+}
+
+.containerInformacao {
+   background-color: #fff;
+}
